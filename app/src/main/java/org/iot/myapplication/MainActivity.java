@@ -29,20 +29,20 @@ public class MainActivity extends AppCompatActivity {
         temp = findViewById(R.id.temp);
         hmi = findViewById(R.id.hmi);
         isRain = findViewById(R.id.isRain);
+        makeRequest();
 
         Button openButton = findViewById(R.id.open);
 
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                makeRequest();
             }
         });
     }
 
     public void makeRequest(){
-        String url = "192.168.0.35:8000/";
-        StringRequest request = new StringRequest(Request.Method.GET, url,
+        String url = "192.168.0.35:8000/window/1/open/";
+        StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -66,5 +66,8 @@ public class MainActivity extends AppCompatActivity {
     public void processResponse(String response){
         Gson gson = new Gson();
         Window window = gson.fromJson(response, Window.class);
+        temp.setText(window.temperature);
+        hmi.setText(window.humidity);
+//        isRain.setText(window.is_rain);
     }
 }
