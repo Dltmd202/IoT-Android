@@ -6,4 +6,5 @@ public class Window {
     String temperature;
     String humidity;
     String is_person;
+    String is_rain;
 }
