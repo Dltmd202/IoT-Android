@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,11 +29,14 @@ public class MainActivity extends AppCompatActivity {
     TextView isPerson;
     TextView wishTemp;
     TextView wishHum;
+    TextView openState;
+    TextView lockState;
 
     EditText wishTempEdit;
     EditText wishHumEdit;
 
     Button openButton;
+    Button closeButton;
     Button adjustButton;
     Button syncButton;
     String baseUrl = "http://172.20.10.7:8000/";
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         isPerson = findViewById(R.id.isPerson);
         wishTempEdit = findViewById(R.id.wishTempEdit);
         wishHumEdit = findViewById(R.id.wishHumEdit);
+        openState = findViewById(R.id.openState);
+        lockState = findViewById(R.id.lockState);
 
         wishTemp = findViewById(R.id.wishTemp);
         wishHum = findViewById(R.id.wishHum);
@@ -60,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         getWindowInformation();
 
         openButton = findViewById(R.id.open);
+        closeButton = findViewById(R.id.close);
         adjustButton = findViewById(R.id.adjust);
         syncButton = findViewById(R.id.sync);
 
@@ -68,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("openButton", "press");
                 setWindowOpen();
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("closeButton", "press");
+                setWindowClose();
             }
         });
 
@@ -119,13 +134,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setWindowOpen(){
-        Log.d("WindowInfo", "hi");
         String url = "window/inf/1/open/";
         StringRequest request = new StringRequest(Request.Method.GET, baseUrl + url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("WindowOpen", response);
+                        Toast.makeText(getApplicationContext(),
+                                "창문을 열었습니다.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("WindowOpen", error.getMessage());
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+        request.setShouldCache(false);
+        requestQueue.add(request);
+    }
+
+    public void setWindowClose(){
+        String url = "window/inf/1/close/";
+        StringRequest request = new StringRequest(Request.Method.GET, baseUrl + url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("WindowOpen", response);
+                        Toast.makeText(getApplicationContext(),
+                                "창문을 닫았습니다.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -189,5 +234,7 @@ public class MainActivity extends AppCompatActivity {
         isPerson.setText(window.is_person.toString());
         wishTemp.setText(window.wishing_temp.toString());
         wishHum.setText(window.wishing_hum.toString());
+        openState.setText(window.is_open.toString());
+        lockState.setText(window.is_lock.toString());
     }
 }

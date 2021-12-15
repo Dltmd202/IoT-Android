@@ -9,4 +9,6 @@ public class Window {
     String is_rain;
     String wishing_temp;
     String wishing_hum;
+    String is_open;
+    String is_lock;
 }
