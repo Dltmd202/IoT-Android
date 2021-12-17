@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         };
         request.setShouldCache(false);
         requestQueue.add(request);
+        openState.setText("true");
     }
 
     public void setWindowClose(){
@@ -187,10 +188,10 @@ public class MainActivity extends AppCompatActivity {
         };
         request.setShouldCache(false);
         requestQueue.add(request);
+        openState.setText("false");
     }
 
     public void adjustWindowInfo(){
-        Log.d("WindowInfo", "hi");
         String wt = wishTempEdit.getText().toString();
         String wh = wishHumEdit.getText().toString();
         String url = "window/inf/1/";
@@ -200,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("WindowOpen", response);
+                        Toast.makeText(getApplicationContext(),
+                                "온 습도를 수정했습니다",
+                                Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -222,11 +226,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void processResponse(String response){
         Gson gson = new Gson();
-        Window window = gson.fromJson(response, Window.class);
-        Log.d("WindowInfo", window.temperature);
-        Log.d("WindowInfo", window.humidity);
-        Log.d("WindowInfo", window.is_rain);
-        Log.d("WindowInfo", window.is_person);
+        Window window = gson.fromJson(
+                response, Window.class
+        );
+        Log.d("API REQ", "temperature : " + window.temperature.toString());
+        Log.d("API REQ", "humidity : " + window.humidity.toString());
+        Log.d("API REQ", "is_rain : " + window.is_rain.toString());
+        Log.d("API REQ", "is_person : " + window.is_person.toString());
+        Log.d("API REQ", "wishing_temp : " + window.wishing_temp.toString());
+        Log.d("API REQ", "wishing_hum : " + window.wishing_hum.toString());
+        Log.d("API REQ", "is_open : " + window.is_open.toString());
+        Log.d("API REQ", "is_lock : " + window.is_lock.toString());
 
         temp.setText(window.temperature.toString());
         hmi.setText(window.humidity.toString());

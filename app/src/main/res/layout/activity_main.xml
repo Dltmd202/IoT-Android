@@ -241,7 +241,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="희망온도 설정"
+                android:text="희망습도 설정"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/wishHumEdit"
                 app:layout_constraintHorizontal_bias="0.463"
